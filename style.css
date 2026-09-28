@@ -1,0 +1,1201 @@
+/* ============================================================
+   MESA DOS HERÓIS — FICHA DE PERSONAGEM D&D 5E
+   style.css — organizado em seções numeradas
+   ============================================================ */
+
+/* ===== 1. VARIÁVEIS ===== */
+:root {
+  --accent: #5bc0eb;
+  --accent-text: #a8e4ff;
+  --accent-contrast: #0a1a24;
+  --bg: #0c0b10;
+  --surface: #161420;
+  --surface-hover: #201d2e;
+  --text: #e6e4ee;
+  --text-muted: #9e9ab2;
+  --border: #2d283c;
+  --border-gold: rgba(91, 192, 235, 0.3);
+  --radius: 8px;
+}
+
+/* ===== 2. BASE ===== */
+body {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  background-image:
+    radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
+    radial-gradient(circle at 80% 80%, rgba(100, 50, 150, 0.05) 0%, transparent 50%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  margin: 0;
+  padding-bottom: 2rem;
+}
+
+h1, h2, h3, h4, .brand-font {
+  font-family: Georgia, 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+  font-variant: small-caps;
+  letter-spacing: 0.8px;
+  font-weight: 700;
+  color: var(--accent-text);
+}
+
+/* ===== 3. SISTEMA DE ÍCONES EM CSS PURO ===== */
+.ico {
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  box-sizing: border-box;
+  line-height: 1;
+  margin-right: 5px;
+  flex-shrink: 0;
+}
+
+/* Espadas cruzadas */
+.ico-swords { width: 16px; height: 16px; }
+.ico-swords::before, .ico-swords::after {
+  content: '';
+  position: absolute;
+  top: 1px; left: 7px;
+  width: 2px; height: 14px;
+  background: currentColor;
+  border-radius: 1px;
+}
+.ico-swords::before { transform: rotate(45deg); }
+.ico-swords::after { transform: rotate(-45deg); }
+
+/* Dado */
+.ico-dice {
+  width: 15px; height: 15px;
+  border: 1.5px solid currentColor;
+  border-radius: 3px;
+}
+.ico-dice::before {
+  content: '';
+  position: absolute;
+  top: 2px; left: 2px;
+  width: 2px; height: 2px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 6px 0 currentColor, 0 6px currentColor, 6px 6px currentColor, 3px 3px currentColor;
+}
+.ico-dice.spinning { animation: spinDice 0.6s ease-out; }
+@keyframes spinDice {
+  0% { transform: rotate(0deg) scale(0.8); }
+  50% { transform: rotate(180deg) scale(1.2); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+/* Pergaminho */
+.ico-scroll {
+  width: 13px; height: 15px;
+  border: 1.5px solid currentColor;
+  border-radius: 2px 4px 2px 4px;
+}
+.ico-scroll::before {
+  content: '';
+  position: absolute;
+  top: 3px; left: 2px; right: 2px;
+  height: 1px;
+  background: currentColor;
+  box-shadow: 0 3px currentColor, 0 6px currentColor;
+}
+
+/* Cadeado */
+.ico-lock {
+  width: 11px; height: 9px;
+  border: 1.5px solid currentColor;
+  border-radius: 2px;
+  margin-top: 4px;
+}
+.ico-lock::before {
+  content: '';
+  position: absolute;
+  bottom: 100%; left: 1px;
+  width: 5px; height: 4px;
+  border: 1.5px solid currentColor;
+  border-bottom: none;
+  border-radius: 3px 3px 0 0;
+}
+
+/* Usuário */
+.ico-user { width: 14px; height: 14px; }
+.ico-user::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 3px;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+}
+.ico-user::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 12px; height: 5px;
+  border: 1.5px solid currentColor;
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+}
+
+/* Impressora */
+.ico-print {
+  width: 14px; height: 12px;
+  border: 1.5px solid currentColor;
+  border-radius: 2px 2px 0 0;
+}
+.ico-print::before {
+  content: '';
+  position: absolute;
+  bottom: -3px; left: 2px; right: 2px;
+  height: 4px;
+  background: currentColor;
+}
+
+/* Salvar (disquete) */
+.ico-save {
+  width: 13px; height: 13px;
+  border: 1.5px solid currentColor;
+  border-radius: 2px;
+}
+.ico-save::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 3px;
+  width: 5px; height: 4px;
+  background: currentColor;
+}
+
+/* Copiar */
+.ico-copy {
+  width: 11px; height: 13px;
+  border: 1.5px solid currentColor;
+  border-radius: 2px;
+}
+.ico-copy::before {
+  content: '';
+  position: absolute;
+  top: -2px; left: 2px; right: 2px;
+  height: 2px;
+  background: currentColor;
+}
+
+/* Checkmark */
+.ico-check { width: 12px; height: 12px; }
+.ico-check::after {
+  content: '';
+  position: absolute;
+  left: 2px; top: 1px;
+  width: 4px; height: 8px;
+  border: solid currentColor;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* Triângulo de aviso */
+.ico-warn {
+  width: 0; height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 11px solid currentColor;
+}
+.ico-warn::after {
+  content: '!';
+  position: absolute;
+  top: 1px; left: -2px;
+  font-size: 8px;
+  font-weight: 900;
+  color: var(--bg, #161420);
+  line-height: 1;
+  font-family: sans-serif;
+}
+
+/* Coroa */
+.ico-crown {
+  width: 14px; height: 10px;
+  background: currentColor;
+  clip-path: polygon(0% 100%, 100% 100%, 100% 0%, 75% 60%, 50% 0%, 25% 60%, 0% 0%);
+}
+
+/* Pata de animal */
+.ico-paw { width: 13px; height: 13px; }
+.ico-paw::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 2px;
+  width: 8px; height: 6px;
+  background: currentColor;
+  border-radius: 50% 50% 40% 40%;
+}
+.ico-paw::after {
+  content: '';
+  position: absolute;
+  top: 1px; left: 1px;
+  width: 3px; height: 3px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 4px -2px 0 currentColor, 7px 0 currentColor;
+}
+
+/* Olho */
+.ico-eye {
+  width: 15px; height: 9px;
+  border: 1.5px solid currentColor;
+  border-radius: 80% 0;
+  transform: rotate(-45deg);
+  margin-top: 2px;
+}
+.ico-eye::before {
+  content: '';
+  position: absolute;
+  top: 1px; left: 1px;
+  width: 4px; height: 4px;
+  background: currentColor;
+  border-radius: 50%;
+}
+
+/* Lupa / Investigação */
+.ico-search {
+  width: 9px; height: 9px;
+  border: 1.5px solid currentColor;
+  border-radius: 50%;
+  margin-bottom: 2px;
+}
+.ico-search::after {
+  content: '';
+  position: absolute;
+  top: 6px; left: 6px;
+  width: 5px; height: 1.5px;
+  background: currentColor;
+  transform: rotate(45deg);
+}
+
+/* Livro */
+.ico-book {
+  width: 11px; height: 13px;
+  border: 1.5px solid currentColor;
+  border-radius: 1px 3px 3px 1px;
+}
+.ico-book::before {
+  content: '';
+  position: absolute;
+  top: 2px; left: 2px;
+  width: 5px; height: 1px;
+  background: currentColor;
+  box-shadow: 0 3px currentColor, 0 6px currentColor;
+}
+
+/* Máscara */
+.ico-mask {
+  width: 14px; height: 8px;
+  border: 1.5px solid currentColor;
+  border-radius: 0 0 8px 8px;
+  margin-top: 2px;
+}
+.ico-mask::before {
+  content: '';
+  position: absolute;
+  top: 1px; left: 2px;
+  width: 3px; height: 3px;
+  background: currentColor;
+  border-radius: 50%;
+  box-shadow: 5px 0 currentColor;
+}
+
+/* Estrela / Selo */
+.ico-star {
+  width: 12px; height: 12px;
+  background: currentColor;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+
+/* Moeda dourada */
+.ico-coin {
+  width: 13px; height: 13px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #e8f9ff, #5bc0eb 70%, #2a7fa8);
+  border: 1px solid #2a7fa8;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+
+/* Escudo */
+.ico-shield {
+  width: 11px; height: 13px;
+  border: 1.5px solid currentColor;
+  border-radius: 2px 2px 7px 7px;
+}
+
+/* Seta voltar */
+.ico-arrow-left {
+  width: 8px; height: 8px;
+  border-left: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+}
+
+/* Marcadores geométricos de atributos */
+.attr-marker {
+  display: inline-block;
+  width: 8px; height: 8px;
+  margin-right: 5px;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+.attr-marker-FOR { background: #e74c3c; border-radius: 50%; }
+.attr-marker-DES { background: #2ecc71; border-radius: 0; }
+.attr-marker-CON { background: #e67e22; border-radius: 1px; transform: rotate(45deg); width: 7px; height: 7px; }
+.attr-marker-INT { background: #3498db; border-radius: 50%; }
+.attr-marker-SAB { background: #9b59b6; border-radius: 0; }
+.attr-marker-CAR { background: #f1c40f; border-radius: 50%; }
+
+/* ===== 4. CABEÇALHO E NAVEGAÇÃO ===== */
+.app-header {
+  background: rgba(22, 20, 32, 0.95);
+  border-bottom: 1px solid var(--border-gold);
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 0.75rem 1rem;
+}
+.nav-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--accent-text);
+}
+.nav-tabs { display: flex; gap: 0.5rem; }
+.nav-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 0.4rem 0.9rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+}
+.nav-btn:hover, .nav-btn.active {
+  background: var(--surface-hover);
+  color: var(--accent-text);
+  border-color: var(--accent);
+}
+.user-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid var(--accent);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: var(--accent-text);
+}
+.btn-logout {
+  background: transparent;
+  border: none;
+  color: #ff6b6b;
+  cursor: pointer;
+  padding: 0 0.2rem;
+  font-size: 0.85rem;
+}
+.btn-logout:hover { text-decoration: underline; }
+
+.main-content {
+  max-width: 1100px;
+  margin: 1.5rem auto;
+  padding: 0 1rem;
+}
+
+/* ===== 5. PAINÉIS ===== */
+.rpg-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+.rpg-panel::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0.5;
+}
+
+/* ===== 6. TELA DE LOGIN ===== */
+.login-hero { text-align: center; margin-bottom: 2rem; }
+.login-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.25rem;
+}
+.player-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+.player-card:hover, .player-card.active {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.15);
+}
+.player-avatar {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: var(--surface-hover);
+  border: 2px solid var(--accent);
+  margin: 0 auto 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+.player-status-badge {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+  display: inline-block;
+}
+.status-has-sheet { background: rgba(46, 204, 113, 0.2); color: #2ecc71; border: 1px solid rgba(46, 204, 113, 0.4); }
+.status-empty { background: rgba(255, 255, 255, 0.05); color: var(--text-muted); }
+.login-form-card { max-width: 460px; margin: 0 auto; }
+
+/* ===== 7. CAMPOS TRAVADOS E BADGES ===== */
+.locked-value-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  background: rgba(212, 175, 55, 0.08);
+  border: 1px dashed var(--accent);
+  padding: 0.6rem 0.85rem;
+  border-radius: var(--radius);
+  color: var(--accent-text);
+  font-weight: 600;
+  min-height: 42px;
+  box-sizing: border-box;
+}
+.badge-master {
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: rgba(212, 175, 55, 0.2);
+  border: 1px solid var(--accent);
+  color: var(--accent-text);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+.badge-free {
+  font-size: 0.72rem;
+  font-weight: 500;
+  background: rgba(52, 152, 219, 0.15);
+  border: 1px solid rgba(52, 152, 219, 0.4);
+  color: #3498db;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.player-top-banner {
+  background: linear-gradient(135deg, rgba(22, 20, 32, 0.95), rgba(35, 30, 48, 0.95));
+  border: 1px solid var(--border-gold);
+  margin-bottom: 1.5rem;
+}
+
+/* ===== 8. BARRA DE PROGRESSO ===== */
+.progress-bar-container {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  margin-bottom: 2rem;
+  padding: 0 1rem;
+}
+.progress-line {
+  position: absolute;
+  top: 50%; left: 2rem; right: 2rem;
+  height: 2px;
+  background: var(--border);
+  z-index: 1;
+  transform: translateY(-50%);
+}
+.progress-line-fill {
+  height: 100%;
+  background: var(--accent);
+  width: 0%;
+  transition: width 0.3s ease;
+}
+.step-item {
+  position: relative;
+  z-index: 2;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  cursor: pointer;
+}
+.step-circle {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  transition: all 0.2s ease;
+}
+.step-item.active .step-circle {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #000;
+}
+.step-item.completed .step-circle {
+  border-color: var(--accent);
+  background: var(--surface-hover);
+  color: var(--accent-text);
+}
+.step-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+.step-item.active .step-label { color: var(--accent-text); }
+
+/* ===== 9. ATRIBUTOS (GRID ESCURO) ===== */
+.attributes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.attr-card {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  text-align: center;
+  position: relative;
+}
+.attr-card .attr-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+.attr-mod {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--accent-text);
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+.attr-val-box {
+  margin-top: 0.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* Contadores de compra de pontos */
+.btn-counter {
+  width: 28px; height: 28px;
+  border-radius: 4px;
+  background: var(--surface-hover);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-counter:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent-text);
+}
+.btn-counter:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* ===== 10. ROLAGEM DE DADOS ===== */
+.dice-area {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px dashed var(--border-gold);
+  border-radius: var(--radius);
+  padding: 1rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+.dice-results {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+.dice-chip {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--accent-text);
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  font-weight: bold;
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+@keyframes popIn {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ===== 11. PERÍCIAS (GRID ESCURO) ===== */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+.skill-item {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.6rem 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+}
+.skill-item:hover {
+  border-color: rgba(212, 175, 55, 0.5);
+  background: var(--surface-hover);
+}
+.skill-item.selected {
+  border-color: var(--accent);
+  background: rgba(212, 175, 55, 0.1);
+}
+.skill-item input[type="checkbox"] {
+  accent-color: var(--accent);
+  width: 18px; height: 18px;
+  cursor: pointer;
+}
+.skill-meta { display: flex; flex-direction: column; }
+.skill-name { font-weight: 600; font-size: 0.9rem; }
+.skill-attr { font-size: 0.75rem; color: var(--text-muted); }
+
+/* ===== 12. FICHA DE PAPEL ===== */
+.paper-sheet {
+  --paper-bg: #f7f1de;
+  --paper-ink: #211308;
+  --paper-title: #3b200b;
+  --paper-border: #6e4726;
+  --paper-accent: #8c5a2b;
+  --paper-box: #fffefb;
+  background: var(--paper-bg);
+  background-image:
+    radial-gradient(circle at 15% 15%, rgba(139, 90, 43, 0.08) 0%, transparent 45%),
+    radial-gradient(circle at 85% 85%, rgba(100, 60, 20, 0.08) 0%, transparent 50%),
+    repeating-linear-gradient(0deg, rgba(139, 90, 43, 0.02) 0px, rgba(139, 90, 43, 0.02) 2px, transparent 2px, transparent 4px);
+  color: var(--paper-ink);
+  border: 3px double #6e4726;
+  border-radius: 10px;
+  padding: 1.75rem 1.5rem;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.65), inset 0 0 50px rgba(139, 90, 43, 0.12);
+  margin-bottom: 2rem;
+  position: relative;
+}
+.paper-sheet::before {
+  content: '';
+  position: absolute;
+  top: 6px; left: 6px; right: 6px; bottom: 6px;
+  border: 1px solid rgba(110, 71, 38, 0.35);
+  border-radius: 6px;
+  pointer-events: none;
+}
+.sheet-section-title {
+  color: var(--paper-title);
+  border-bottom: 2px solid var(--paper-accent);
+  padding-bottom: 0.4rem;
+  margin-top: 1.75rem;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* Cabeçalho da ficha (4 campos) */
+.sheet-top-grid {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr 1.5fr 0.9fr;
+  gap: 1rem;
+  background: rgba(139, 90, 43, 0.07);
+  border: 2px solid var(--paper-accent);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+.sheet-top-field { display: flex; flex-direction: column; }
+.sheet-top-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 800;
+  color: #5c3a21;
+  margin-bottom: 0.3rem;
+}
+.sheet-top-value {
+  background: var(--paper-box);
+  border: 1.5px solid var(--paper-accent);
+  border-radius: 6px;
+  min-height: 44px;
+  padding: 0.4rem 0.65rem;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+.sheet-locked-text {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #2b1706;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.sheet-top-value select, .sheet-top-value input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #211308;
+  outline: none;
+}
+
+/* ===== 13. MÉTODO DE ATRIBUTOS ===== */
+.method-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 0.85rem;
+  margin-bottom: 1rem;
+}
+.method-card {
+  background: var(--paper-box);
+  border: 2px solid var(--paper-accent);
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #211308;
+}
+.method-card:hover {
+  border-color: #d4af37;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(92, 58, 33, 0.2);
+}
+.method-card.active {
+  background: #6b3e19;
+  color: #ffffff;
+  border-color: #381e09;
+  box-shadow: 0 4px 12px rgba(59, 32, 11, 0.35);
+}
+.method-card.active .method-desc { color: #f7f1de; }
+.method-title {
+  font-weight: 800;
+  font-size: 1rem;
+  margin-bottom: 0.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+.method-desc { font-size: 0.78rem; color: #5c3a21; }
+
+/* ===== 14. ATRIBUTOS NA FICHA DE PAPEL ===== */
+.paper-attr-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.paper-attr-box {
+  background: var(--paper-box);
+  border: 2px solid var(--paper-border);
+  border-radius: 8px;
+  padding: 0.95rem 1rem;
+  box-shadow: 0 3px 10px rgba(92, 58, 33, 0.08);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: 100%;
+  box-sizing: border-box;
+}
+.paper-attr-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #d8c6b2;
+  padding-bottom: 0.4rem;
+  margin-bottom: 0.65rem;
+  gap: 0.5rem;
+}
+.paper-attr-name {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-variant: small-caps;
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: #381e09;
+  word-break: break-word;
+}
+.paper-attr-mod-circle {
+  min-width: 42px;
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  background: #6b3e19;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 1.2rem;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  border: 2px solid #8c5a2b;
+  flex-shrink: 0;
+}
+.paper-attr-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.65rem;
+  background: #fdfaf3;
+  padding: 0.4rem 0.65rem;
+  border-radius: 6px;
+  border: 1px dashed #c4b098;
+  gap: 0.5rem;
+}
+.paper-attr-score {
+  font-size: 1.8rem;
+  font-weight: 900;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  color: #1f1107;
+  line-height: 1;
+}
+.paper-attr-explain {
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: #2b1706;
+  background: #f5edda;
+  border-left: 3px solid #8c5a2b;
+  padding: 0.5rem 0.65rem;
+  border-radius: 0 4px 4px 0;
+  margin-top: auto;
+}
+
+/* ===== 15. PERÍCIAS NA FICHA DE PAPEL ===== */
+.paper-skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+.paper-skill-card {
+  background: var(--paper-box);
+  border: 2px solid var(--paper-accent);
+  border-radius: 8px;
+  padding: 0.85rem;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  height: 100%;
+  box-sizing: border-box;
+}
+.paper-skill-card:hover:not(.disabled) {
+  border-color: #d4af37;
+  box-shadow: 0 4px 12px rgba(92, 58, 33, 0.16);
+  transform: translateY(-2px);
+}
+.paper-skill-card.selected {
+  background: #fbf7eb;
+  border-color: #1e824c;
+  box-shadow: 0 0 0 1px #1e824c, 0 4px 10px rgba(30, 130, 76, 0.15);
+}
+.paper-skill-card.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #f5f2e9;
+}
+.paper-skill-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.paper-skill-left {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+.paper-skill-checkbox {
+  width: 18px; height: 18px;
+  accent-color: #1e824c;
+  cursor: pointer;
+}
+.paper-skill-title {
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: #2b1706;
+}
+.paper-skill-attr {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #6b3e19;
+}
+.paper-skill-explain {
+  font-size: 0.8rem;
+  color: #4a3828;
+  line-height: 1.4;
+}
+.paper-skill-bonus-tag {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 1rem;
+  font-weight: 800;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+}
+
+/* ===== 16. GUIA (ACCORDIONS) ===== */
+.accordion-item {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+  background: var(--surface);
+}
+.accordion-header {
+  padding: 1rem 1.25rem;
+  background: var(--surface);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  color: var(--accent-text);
+  transition: background 0.2s;
+}
+.accordion-header:hover { background: var(--surface-hover); }
+.accordion-content {
+  padding: 1.25rem;
+  border-top: 1px solid var(--border);
+  display: none;
+  background: rgba(0, 0, 0, 0.15);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+.accordion-item.open .accordion-content { display: block; }
+.accordion-item.open .accordion-icon { transform: rotate(180deg); }
+.accordion-icon { transition: transform 0.2s; }
+
+/* ===== 17. ALERTAS ===== */
+.alert-banner {
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.alert-warning { background: rgba(91, 192, 235, 0.15); border: 1px solid rgba(91, 192, 235, 0.4); color: #7fd4f0; }
+.alert-info { background: rgba(52, 152, 219, 0.15); border: 1px solid rgba(52, 152, 219, 0.4); color: #3498db; }
+.alert-success { background: rgba(46, 204, 113, 0.15); border: 1px solid rgba(46, 204, 113, 0.4); color: #2ecc71; }
+.alert-danger { background: rgba(231, 76, 60, 0.15); border: 1px solid rgba(231, 76, 60, 0.4); color: #e74c3c; }
+
+/* ===== 18. RESPONSIVO ===== */
+@media (max-width: 850px) {
+  .paper-attr-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .sheet-top-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}
+@media (max-width: 550px) {
+  .paper-attr-grid { grid-template-columns: 1fr; }
+}
+
+/* ===== 2.1 TEMAS DE PERSONAGEM ===== */
+.theme-p1 { --paper-bg: #f1e8fb; --paper-ink: #1c0a33; --paper-title: #3d1466; --paper-border: #5b2d8e; --paper-accent: #7d4bb5; --paper-box: #faf5ff; } /* Karol — roxo */
+.theme-p2 { --paper-bg: #fbe9e7; --paper-ink: #2b0a0a; --paper-title: #5c1616; --paper-border: #8c2f39; --paper-accent: #b34a57; --paper-box: #fff7f6; } /* Jô — vermelho */
+.theme-p3 { --paper-bg: #fdeef5; --paper-ink: #330a1f; --paper-title: #66143d; --paper-border: #8e2d5b; --paper-accent: #b54b7d; --paper-box: #fff5fa; } /* Juh — rosa */
+.theme-p4 { --paper-bg: #eef5e0; --paper-ink: #1a2408; --paper-title: #2e4210; --paper-border: #5a6b2e; --paper-accent: #7a8c3e; --paper-box: #f9fcf2; } /* Daniel — verde */
+.theme-p5 { --paper-bg: #e3f2fd; --paper-ink: #0a1f33; --paper-title: #103a5c; --paper-border: #2d6b9e; --paper-accent: #4a8cc2; --paper-box: #f5fbff; } /* Thalyson — azul */
+
+/* ===== 19. IMPRESSÃO (bloco único) ===== */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  .app-header, .nav-tabs, .btn, .progress-bar-container, .no-print,
+  #screen-login, #screen-guide {
+    display: none !important;
+  }
+  #screen-creator { display: block !important; }
+  .paper-sheet {
+    background: #ffffff !important;
+    box-shadow: none !important;
+    border: 2px solid #000000 !important;
+    padding: 0 !important;
+    color: #000000 !important;
+  }
+  .paper-sheet::before { display: none !important; }
+  .sheet-section-title {
+    color: #000000 !important;
+    border-color: #000000 !important;
+  }
+  .paper-attr-box, .paper-skill-card, .sheet-top-grid, .sheet-top-value {
+    border-color: #000000 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    box-shadow: none !important;
+  }
+  .paper-attr-mod-circle {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: 2px solid #000000 !important;
+  }
+  .paper-attr-explain, .paper-skill-explain {
+    color: #333333 !important;
+    background: #ffffff !important;
+  }
+  .rpg-panel, .sheet-preview {
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+    background: #fff !important;
+    color: #000 !important;
+  }
+  .brand-font, h1, h2, h3, h4, .attr-mod, .sheet-stat-pill .val {
+    color: #000 !important;
+  }
+  .sheet-stat-pill {
+    border: 1px solid #ddd !important;
+    background: #f9f9f9 !important;
+  }
+}
+
+/* ===== 20. BARRA DE ROLAGEM ===== */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* ===== 21. COMPONENTES BÁSICOS (botões, campos, badges) ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface-hover);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn:hover { border-color: var(--accent); color: var(--accent-text); }
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
+}
+.btn-primary:hover { filter: brightness(1.1); color: var(--accent-contrast); }
+.input {
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+.input:focus { outline: none; border-color: var(--accent); }
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+}
+.screen-section { display: none; }
+
+/* ===== 22. MAGIAS & TRUQUES ===== */
+.spell-subtitle {
+  font-size: 1rem;
+  color: var(--paper-title, #3b200b);
+  margin: 1.25rem 0 0.5rem;
+  font-variant: small-caps;
+  letter-spacing: 0.5px;
+}
+.spell-counter {
+  display: inline-block;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  margin-bottom: 0.75rem;
+}

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mesa dos Heróis — Criação de Personagem Frostbit</title>
+  <link rel="stylesheet" href="style.css">
+<body>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="nav-container">
+      <a href="#" class="brand brand-font" onclick="navTo('login'); return false;">
+        <span class="ico ico-swords"></span> Mesa dos Heróis
+      </a>
+      
+      <div id="user-pill-container" class="no-print"></div>
+
+      <div class="nav-tabs no-print">
+        <button id="nav-btn-creator" class="nav-btn active" onclick="handleNavCreatorClick()">
+          <span class="ico ico-dice"></span> Criação de Personagem
+        </button>
+        <button id="nav-btn-guide" class="nav-btn" onclick="navTo('guide')">
+          <span class="ico ico-scroll"></span> Guia de Regras
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+
+    <!-- 1. LOGIN SCREEN -->
+    <section id="screen-login" class="screen-section">
+      <div class="login-hero">
+        <h1 class="brand-font" style="font-size: 2.2rem; margin-bottom: 0.5rem;">Criação de Personagem Frostbit</h1>
+        <p class="muted" style="max-width: 600px; margin: 0 auto;">
+          Bem-vindo à Mesa dos Heróis! Escolha seu nome abaixo, digite sua senha e comece a forjar a ficha do seu herói para a nossa campanha.
+        </p>
+      </div>
+
+      <div class="rpg-panel login-form-card">
+        <h2 class="brand-font" style="text-align: center; margin-bottom: 1.25rem; font-size: 1.4rem;">
+          <span class="ico ico-swords"></span> Acesso do Jogador
+        </h2>
+
+        <form id="login-form-single" onsubmit="submitSingleLogin(event)">
+          <div style="margin-bottom: 1.25rem;">
+            <label for="login-player-select" style="display: block; font-weight: 600; margin-bottom: 0.4rem; color: var(--text);">
+              Quem é você? *
+            </label>
+            <select id="login-player-select" class="input" style="width: 100%; box-sizing: border-box;" required onchange="onPlayerSelectChange()">
+              <option value="">-- Selecione seu nome --</option>
+              <!-- Preenchido via JavaScript -->
+            </select>
+          </div>
+
+          <div id="player-preview-card" style="display: none; margin-bottom: 1.25rem; padding: 0.75rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid var(--border-gold); border-radius: var(--radius); font-size: 0.85rem;">
+            <!-- Resumo dos dados pré-definidos -->
+          </div>
+
+          <div style="margin-bottom: 1.25rem;">
+            <label for="login-password-single" style="display: block; font-weight: 600; margin-bottom: 0.4rem; color: var(--text);">
+              Senha de Acesso *
+            </label>
+            <input type="password" id="login-password-single" class="input" style="width: 100%; box-sizing: border-box;" placeholder="Digite sua senha..." required autocomplete="current-password">
+            <span style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.35rem; display: block;">
+              Dica: sua senha é seu próprio nome em minúsculas (sem espaços).
+            </span>
+          </div>
+
+          <div id="login-error-msg" class="alert-banner alert-danger" style="display: none;">
+            <span class="ico ico-warn"></span> Senha incorreta para o jogador selecionado. Tente novamente!
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; font-size: 1rem; padding: 0.65rem 1rem;">
+            Entrar na Mesa <span class="ico ico-swords" style="margin-left: 4px; margin-right: 0;"></span>
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- 2. PLAYER CHARACTER SHEET SCREEN (SINGLE CONTINUOUS PAGE) -->
+    <section id="screen-creator" class="screen-section" style="display: none;">
+      
+      <!-- Top Discrete Player Status Bar -->
+      <div class="no-print" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; background: var(--surface); padding: 0.5rem 1rem; border-radius: var(--radius); border: 1px solid var(--border);">
+        <span style="font-size: 0.85rem; color: var(--text-muted);">
+          <span class="ico ico-scroll"></span> Ficha de Personagem D&D 5e — Jogador(a): <strong id="player-discrete-name" style="color: var(--accent-text);">Visitante</strong>
+        </span>
+        <button class="btn-logout" onclick="logout()" style="font-size: 0.85rem; color: #ff6b6b; cursor: pointer;">
+          [Trocar de Jogador]
+        </button>
+      </div>
+
+      <!-- FOLHA CONTÍNUA DE PERSONAGEM (ESTILO PAPEL MEDIEVAL) -->
+      <div class="paper-sheet" id="printable-character-sheet">
+        
+        <!-- 1. TOPO DA FICHA (Apenas 4 campos principais) -->
+        <div style="text-align: center; margin-bottom: 1.25rem; border-bottom: 2px solid #8c5a2b; padding-bottom: 0.5rem;">
+          <h1 class="brand-font" style="margin: 0; font-size: 1.9rem; color: #381e09; letter-spacing: 1px;">
+            <span class="ico ico-swords"></span> FOLHA DE PERSONAGEM
+          </h1>
+          <span style="font-size: 0.82rem; font-weight: 700; color: #6b3e19; letter-spacing: 0.5px;">
+            Dungeons & Dragons 5ª Edição — Mesa dos Heróis
+          </span>
+        </div>
+
+        <div class="sheet-top-grid">
+          <!-- Campo 1: Nome do Personagem -->
+          <div class="sheet-top-field">
+            <span class="sheet-top-label">Nome do Personagem</span>
+            <div class="sheet-top-value" id="slot-char-name"></div>
+          </div>
+
+          <!-- Campo 2: Espécie -->
+          <div class="sheet-top-field">
+            <span class="sheet-top-label">Espécie</span>
+            <div class="sheet-top-value" id="slot-char-race"></div>
+          </div>
+
+          <!-- Campo 3: Classe(s) -->
+          <div class="sheet-top-field">
+            <span class="sheet-top-label">Classe(s)</span>
+            <div class="sheet-top-value" id="slot-char-class"></div>
+          </div>
+
+          <!-- Campo 4: Nível -->
+          <div class="sheet-top-field">
+            <span class="sheet-top-label">Nível</span>
+            <div class="sheet-top-value" id="slot-char-level"></div>
+          </div>
+        </div>
+
+        <!-- 2. SEÇÃO ATRIBUTOS — ESCOLHA O MÉTODO -->
+        <div class="sheet-section-title">
+          <span><span class="ico ico-dice"></span> ATRIBUTOS — ESCOLHA O MÉTODO</span>
+        </div>
+
+        <div class="no-print" style="margin-bottom: 1rem;">
+          <div class="method-cards-grid">
+            <div class="method-card active" id="btn-method-roll" onclick="setAttrMethod('roll')">
+              <div class="method-title"><span class="ico ico-dice"></span> Rolar dados</div>
+              <div class="method-desc">4d6 descarta o menor (até 3 rolagens)</div>
+            </div>
+            <div class="method-card" id="btn-method-standard" onclick="setAttrMethod('standard')">
+              <div class="method-title"><span class="ico ico-scroll"></span> Números padrão</div>
+              <div class="method-desc">Conjunto: 15, 14, 13, 12, 10, 8</div>
+            </div>
+            <div class="method-card" id="btn-method-pointbuy" onclick="setAttrMethod('pointbuy')">
+              <div class="method-title"><span class="ico ico-coin"></span> Compra de pontos</div>
+              <div class="method-desc">27 pontos oficiais D&D 5e</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Painéis de Interação por Método -->
+        <div id="panel-method-roll" class="no-print" style="background: #fbf7ec; border: 1.5px dashed #8c5a2b; border-radius: 8px; padding: 1rem; margin-bottom: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+            <div>
+              <strong style="color: #381e09;">Rolar 4d6 (descarta o menor dado de cada rolagem)</strong>
+              <div style="font-size: 0.8rem; color: #6b3e19;" id="roll-attempts-count">Tentativas restantes: 3 de 3</div>
+            </div>
+            <button class="btn btn-primary" id="btn-roll-dice" onclick="rollDiceMethod()" style="background: #6b3e19; border-color: #381e09; color: #fff;">
+              <span class="ico ico-dice" id="roll-dice-ico"></span> Rolar Dados Agora
+            </button>
+          </div>
+          <div id="dice-roll-results" class="dice-results" style="margin: 0.75rem 0;"></div>
+          <div id="roll-assignment-box" style="display: none; border-top: 1px solid #d8c6b2; padding-top: 0.75rem;">
+            <div style="font-size: 0.82rem; font-weight: 700; color: #381e09; margin-bottom: 0.4rem;">
+              Distribua os 6 valores rolados para cada atributo:
+            </div>
+            <div id="roll-dropdowns-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 0.5rem;"></div>
+          </div>
+        </div>
+
+        <div id="panel-method-standard" class="no-print" style="display: none; background: #fbf7ec; border: 1.5px dashed #8c5a2b; border-radius: 8px; padding: 1rem; margin-bottom: 1.25rem;">
+          <div style="font-size: 0.85rem; font-weight: 700; color: #381e09; margin-bottom: 0.5rem;">
+            Distribua os valores padrão (15, 14, 13, 12, 10, 8) sem repetir:
+          </div>
+          <div id="standard-dropdowns-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 0.5rem;"></div>
+        </div>
+
+        <div id="panel-method-pointbuy" class="no-print" style="display: none; background: #fbf7ec; border: 1.5px dashed #8c5a2b; border-radius: 8px; padding: 1rem; margin-bottom: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+            <div>
+              <strong style="color: #381e09;">Sistema Oficial de Compra de 27 Pontos</strong>
+              <div style="font-size: 0.8rem; color: #6b3e19;">Custos oficiais: 8=0, 9=1, 10=2, 11=3, 12=4, 13=5, 14=7, 15=9</div>
+            </div>
+            <div style="font-size: 1.1rem; font-weight: 800; color: #381e09;">
+              Pontos Restantes: <span id="pb-remaining-pts" style="color: #27ae60;">27</span> / 27
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. OS 6 ATRIBUTOS COM EXPLICAÇÕES INTERNAS -->
+        <div class="sheet-section-title" style="margin-top: 1rem;">
+          <span><span class="ico ico-swords"></span> OS 6 ATRIBUTOS</span>
+          <span style="font-size: 0.8rem; font-weight: normal; color: #6b3e19;">Modificador = (Valor - 10) / 2 arredondado para baixo</span>
+        </div>
+
+        <div class="paper-attr-grid" id="attributes-display-grid">
+          <!-- Gerado dinamicamente: Força, Destreza, Constituição, Inteligência, Sabedoria, Carisma -->
+        </div>
+
+        <div class="alert-banner alert-info">
+         <span class="ico ico-warn"></span>
+         <strong>Atenção:</strong> o número grande de baixo é o valor bruto do atributo, mas o que você vai usar nas jogadas de dados é o Bônus (o número dentro do círculo marrom). Exemplo: Força 14 tem bônus +2 — ao rolar um d20, some +2 ao resultado.
+        </div>
+
+        <div id="attr-error-banner" class="alert-banner alert-warning no-print" style="display: none; margin-bottom: 1.25rem;"></div>
+
+        <!-- 4. PERÍCIAS PERMITIDAS -->
+        <div class="sheet-section-title">
+          <span><span class="ico ico-scroll"></span> PERÍCIAS</span>
+          <span id="skills-requirement-badge" class="badge" style="background: #6b3e19; color: #ffffff; font-size: 0.85rem; padding: 0.3rem 0.75rem;">
+            Selecionadas 0 de 0
+          </span>
+        </div>
+
+        <div id="skills-requirement-bar" class="alert-banner alert-info no-print" style="margin-bottom: 1rem;">
+          <!-- Mensagem dinâmica de validação -->
+        </div>
+
+        <div class="paper-skills-grid" id="skills-container-grid">
+          <!-- Cartões clicáveis individuais de cada perícia permitida -->
+        </div>
+
+        <!-- SEÇÃO MAGIAS & TRUQUES -->
+        <div id="spells-section" style="display:none;">
+        <h2 class="sheet-section-title"><span class="ico ico-book"></span> Magias & Truques</h2>
+        <div class="alert-banner alert-info" id="spells-requirement-bar"></div>
+        <h3 class="spell-subtitle">Truques (uso ilimitado)</h3>
+        <div id="spells-cantrips-badge" class="spell-counter"></div>
+        <div id="spells-cantrips-grid" class="paper-skills-grid"></div>
+        <h3 class="spell-subtitle">Magias de 1º Nível (usam espaços de magia)</h3>
+        <div id="spells-level1-badge" class="spell-counter"></div>
+         <div id="spells-level1-grid" class="paper-skills-grid"></div>
+         </div>
+
+        <!-- 5. RODAPÉ DA FICHA -->
+        <div style="margin-top: 2rem; border-top: 2px double #8c5a2b; padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div style="font-size: 0.82rem; color: #5c3a21;" class="no-print">
+            <span class="ico ico-save"></span> A ficha é salva no navegador automaticamente para cada jogador.
+          </div>
+          <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-left: auto;" class="no-print">
+            <button class="btn" onclick="copyTextSummary()" style="background: #fffefb; border: 1.5px solid #8c5a2b; color: #381e09; font-weight: 700;">
+              <span class="ico ico-copy"></span> Copiar Resumo
+            </button>
+            <button class="btn" onclick="window.print()" style="background: #8c5a2b; border: 1.5px solid #381e09; color: #ffffff; font-weight: 700;">
+              <span class="ico ico-print"></span> Imprimir / Baixar resumo
+            </button>
+            <button class="btn btn-primary" id="btn-save-sheet" onclick="saveCharacterSheet()" style="background: #27ae60; border-color: #1e824c; color: #fff; font-weight: 800; padding: 0.65rem 1.4rem; font-size: 1rem;">
+              <span class="ico ico-save"></span> Salvar Ficha
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- 3. GUIDE SECTION -->
+    <section id="screen-guide" class="screen-section" style="display: none;">
+      <div class="rpg-panel">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+          <button class="btn" onclick="backFromGuide()" style="background: var(--surface-hover); color: var(--accent-text); border: 1px solid var(--accent); font-weight: 600;">
+            <span class="ico ico-arrow-left"></span> Voltar
+          </button>
+          <span style="font-size: 0.85rem; color: var(--text-muted);">Mesa dos Heróis — Guia D&D 5e</span>
+        </div>
+        <h1 class="brand-font" style="margin-bottom: 0.5rem;"><span class="ico ico-scroll"></span> Guia do Jogador - D&D 5ª Edição</h1>
+        <p class="muted" style="margin-bottom: 1.5rem;">
+          Consulte as regras fundamentais para a criação e entendimento dos atributos, modificadores e perícias no D&D 5e.
+        </p>
+
+        <!-- Accordion 1: Attributes -->
+        <h3 class="brand-font" style="margin-top: 1.5rem; margin-bottom: 1rem;"><span class="ico ico-swords"></span> Os 6 Atributos Principais</h3>
+        
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span><strong>Força (FOR)</strong> — Poder Físico e Muscular</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <p><strong>Representa:</strong> Atletismo, capacidade de empurrar, puxar, carregar e força bruta física.</p>
+            <p><strong>Influencia:</strong> Modificador de ataques e danos com armas corpo a corpo e de arremesso, teste de Atletismo, capacidade de carga e saltos.</p>
+            <p><strong>Exemplo Prático do Mestre:</strong> "Faça um teste de Atletismo para arrombar uma porta de carvalho trancada ou para não ser arrastado pela correnteza de um rio."</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span><strong>Destreza (DES)</strong> — Agilidade, Reflexos e Equilíbrio</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <p><strong>Representa:</strong> Agilidade física, rapidez de reflexos, equilíbrio e coordenação motora fina.</p>
+            <p><strong>Influencia:</strong> Classe de Armadura (CA) sem armadura pesada, iniciativa na batalha, ataques a distância e com armas ágeis (Finesse), perícias Acrobacia, Furtividade e Prestidigitação.</p>
+            <p><strong>Exemplo Prático do Mestre:</strong> "Faça um teste de Furtividade para se esconder nas sombras dos guardas da patrulha."</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span><strong>Constituição (CON)</strong> — Saúde, Vigor e Resistência</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <p><strong>Representa:</strong> Vigor, saúde física, resistência a doenças, venenos e fadiga extrema.</p>
+            <p><strong>Influencia:</strong> Pontos de Vida (PV) ganhos a cada nível e Salvaguardas para manter a concentração de magias ao sofrer dano.</p>
+            <p><strong>Exemplo Prático do Mestre:</strong> "Faça uma Salvaguarda de Constituição para resistir ao veneno do sopro do dragão."</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span><strong>Inteligência (INT)</strong> — Raciocínio, Memória e Conhecimento</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <p><strong>Representa:</strong> Acuidade mental, capacidade de retenção de dados, dedução lógica e estudo acadêmico.</p>
+            <p><strong>Influencia:</strong> Atributo de conjuração para Magos. Perícias Arcanismo, História, Investigação, Natureza e Religião.</p>
+            <p><strong>Exemplo Prático do Mestre:</strong> "Faça um teste de Investigação para examinar a escrivaninha do alquimista e encontrar o compartimento secreto."</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span><strong>Sabedoria (SAB)</strong> — Percepção, Intuição e Empatia</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <p><strong>Representa:</strong> Percepção do ambiente, intuição quanto às intenções dos outros, sintonia com o mundo e força de vontade espiritual.</p>
+            <p><strong>Influencia:</strong> Atributo de conjuração para Clérigos, Druidas e Patrulheiros. Perícias Lidar com Animais, Intuição, Medicina, Percepção e Sobrevivência.</p>
+            <p><strong>Exemplo Prático do Mestre:</strong> "Faça um teste de Percepção para notar os passos sutis dos emboscadores na floresta."</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span><strong>Carisma (CAR)</strong> — Personalidade, Eloquência e Liderança</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <p><strong>Representa:</strong> Força de personalidade, capacidade de persuasão, charme, intimidação e presença magnética.</p>
+            <p><strong>Influencia:</strong> Atributo de conjuração para Bardos, Bruxos, Feiticeiros e Paladinos. Perícias Atuação, Enganação, Intimidação e Persuasão.</p>
+            <p><strong>Exemplo Prático do Mestre:</strong> "Faça um teste de Persuasão para convencer o guarda do portão a deixar o grupo entrar na cidade após o anoitecer."</p>
+          </div>
+        </div>
+
+        <!-- Accordion 2: All 18 Skills -->
+        <h3 class="brand-font" style="margin-top: 2rem; margin-bottom: 1rem;"><span class="ico ico-scroll"></span> As 18 Perícias Oficiais</h3>
+        <div id="guide-skills-container">
+          <!-- Populated by JS -->
+        </div>
+        <!-- Accordion 3: Métodos & Modificadores -->
+        <h3 class="brand-font" style="margin-top: 2rem; margin-bottom: 1rem;"><span class="ico ico-dice"></span> Métodos de Atributos & Modificadores</h3>
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>Como calcular o Modificador do Atributo?</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <p>O modificador é o valor somado ou subtraído dos seus testes de dados (d20). A fórmula matemática é:</p>
+            <div style="background: rgba(0,0,0,0.3); padding: 0.75rem; border-radius: 6px; font-family: monospace; text-align: center; margin: 0.5rem 0; color: var(--accent-text);">
+              Modificador = Math.floor((Valor do Atributo - 10) / 2)
+            </div>
+            <p style="margin-top: 0.5rem;">Por exemplo: Atributo 15 dá modificador +2; Atributo 8 dá modificador -1.</p>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>Quais são os 3 métodos de distribuição?</span>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <p><strong>Rolar dados:</strong> rola 4d6 e descarta o menor dado, seis vezes (até 3 tentativas), e distribui os valores como quiser.</p>
+            <p><strong>Números padrão:</strong> distribui o conjunto fixo 15, 14, 13, 12, 10, 8 entre os atributos.</p>
+            <p><strong>Compra de pontos:</strong> 27 pontos para gastar, com custos oficiais (8=0, 9=1, 10=2, 11=3, 12=4, 13=5, 14=7, 15=9). Valores entre 8 e 15.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
